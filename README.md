@@ -12,6 +12,9 @@ docker run -d \
 # how to run (without building)
 go run main.go
 
+# do not FORGET (run this in postgres, to support UUID)
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 # things to consider:
 - Separate each module
 - Detailed models
