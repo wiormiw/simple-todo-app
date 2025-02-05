@@ -298,6 +298,8 @@ func updateItem(c *fiber.Ctx) error {
 	if err := db.Where("id = ? AND checklist_id = ?", parsedItemID, parsedChecklistID).First(&item).Error; err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Item not found under this checklist"})
 	}
+
+	// Method 1
 	body := c.Body()
 	if len(body) > 0 {
 		var input struct {
@@ -312,6 +314,24 @@ func updateItem(c *fiber.Ctx) error {
 	} else {
 		item.Status = "done"
 	}
+
+	// Method 2
+	// Check if the body is not empty
+	// var input struct {
+	//     ItemName string `json:"itemName"`
+	// }
+
+	// if err := c.BodyParser(&input); err != nil && err.Error() != "EOF" {
+	//     return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid input"})
+	// }
+
+	// If input is provided, update the ItemName
+	// if input.ItemName != "" {
+	//     item.ItemName = input.ItemName
+	// } else {
+	// If no body is provided, mark item as "done"
+	//     item.Status = "done"
+	// }
 
 	if err := db.Save(&item).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to update item"})
