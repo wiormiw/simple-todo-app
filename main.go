@@ -142,9 +142,18 @@ func authMiddleware(ctx *fiber.Ctx) error {
 		return jwtError(ctx, fmt.Errorf("missing token"))
 	}
 
+	// Cara pertama
 	if len(tokenString) > 7 && tokenString[:7] == "Bearer " {
 		tokenString = tokenString[7:]
 	}
+
+	// Cara kedua
+	// Split by spaces
+	// parts := strings.Fields(tokenString)
+
+	// if len(parts) > 1 {
+	// 	tokenString = parts[1]
+	// }
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
